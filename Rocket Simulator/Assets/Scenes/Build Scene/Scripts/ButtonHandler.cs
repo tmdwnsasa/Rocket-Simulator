@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ButtonHandler : MonoBehaviour
 {
+    public GameObject parent;
+
     public GameObject pref01;
     public GameObject pref02;
     public GameObject pref03;
@@ -20,14 +22,24 @@ public class ButtonHandler : MonoBehaviour
     }
     public void OnClickedButton01()
     {
-        Instantiate(pref01, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject prefab01 = Instantiate(pref01);
+        prefab01.transform.parent = parent.transform;
+        Rocket.Max++;
+        prefab01.AddComponent<ObjectMove>().tag = 1;
+        //prefab01.GetComponent<ObjectMove>().GetTime
     }
     public void OnClickedButton02()
     {
-        Instantiate(pref02, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject prefab02 = Instantiate(pref02);
+        prefab02.transform.parent = parent.transform;
+        Rocket.Max++;
+        prefab02.AddComponent<ObjectMove>().tag = 2;
     }
     public void OnClickedButton03()
     {
-        Instantiate(pref03, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject prefab03 = Instantiate(pref03);
+        prefab03.transform.parent = parent.transform;
+        Rocket.Max++;
+        prefab03.AddComponent<ObjectMove>().tag = 3;
     }
 }

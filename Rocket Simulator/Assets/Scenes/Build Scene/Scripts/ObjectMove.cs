@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-static class constants
-{
-    public const float size = 100;
-}
-
 public class ObjectMove : MonoBehaviour
 {
-    private int ClickedOnState = 1;
+    static public float zMax = 0.0f;
+    public int ClickedOnState = 1;
     private int m_Xpos;
     private int m_Ypos;
+    private float time;
 
     public int tag;
 
+    public void SetTime(float time_t) { time = time_t; }
+    public float GetTime() { return time; }
     public void SetXpos(int Xpos) { m_Xpos = Xpos; }
     public float GetXpos() { return m_Xpos; }
     public void SetYpos(int Ypos) { m_Ypos = Ypos; }
@@ -25,39 +24,32 @@ public class ObjectMove : MonoBehaviour
     {
         float temp = (float)Screen.width / (float)Screen.height;
         transform.position = new Vector3(GameFramework.position.x + Screen.width / 2, GameFramework.position.y + Screen.height / 2, 0.0f);
+        time = GameFramework.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_Xpos = (int)GameFramework.position.x / 50;
-        m_Ypos = (int)GameFramework.position.y / 50;
+        m_Xpos = (int)GameFramework.position.x / (int)constants.size;
+        m_Ypos = (int)GameFramework.position.y / (int)constants.size;
 
         CheckClickedOn();
         if (ClickedOnState == 1)
         {
-            transform.position = new Vector3(m_Xpos * 50, m_Ypos*50, 0.0f);
-            Debug.Log(m_Xpos + ", " + GameFramework.position.x);
+            transform.position = new Vector3(m_Xpos * (int)constants.size, m_Ypos* (int)constants.size, zMax - 0.00001f);
+            Debug.Log(m_Xpos + ", " + m_Ypos);
         }
     }
 
     private void CheckClickedOn()
     {
-        if(Input.touchCount > 0)
-        {
-            if (GameFramework.position.x - transform.position.x < constants.size && GameFramework.position.x - transform.position.x > -constants.size &&
-                GameFramework.position.y - transform.position.y < constants.size && GameFramework.position.y - transform.position.y > -constants.size &&
-                GameFramework.touchphase == TouchPhase.Began && GameFramework.selectObj == false)
-            {
-                ClickedOnState = 1;
-                GameFramework.selectObj = true;
-            }
-        }
 
         if(Input.touchCount <= 0)
         {
             ClickedOnState = 0;
             GameFramework.selectObj = false;
+            time = GameFramework.time;
+            zMax -= 0.00001f;
         }
     }
 }

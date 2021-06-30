@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+static class constants
+{
+    public const float size = 40.0f;
+}
+
 public class GameFramework : MonoBehaviour
 {
-    public static Vector3 position;
-    public static TouchPhase touchphase;
-    public static bool selectObj;
-    private float width;
-    private float height;
-    private float phone = 2.0f;
+    public static float                 time;                       //시간
+    public static Vector3               position;                   //마우스 위치
+    public static TouchPhase            touchphase;                 //터치의 상태
+    public static bool                  selectObj;                  //클릭한 상황
+
+    private float                       width;
+    private float                       height;
 
     void Awake()
     {
@@ -33,6 +39,8 @@ public class GameFramework : MonoBehaviour
     }
     void Update()
     {
+        time += Time.deltaTime;
+
         if (Input.touchCount > 0)
         {
             float temp = (float)Screen.width / (float)Screen.height * 4.2f;
