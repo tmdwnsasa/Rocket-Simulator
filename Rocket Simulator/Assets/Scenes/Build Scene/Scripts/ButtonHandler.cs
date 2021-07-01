@@ -25,7 +25,6 @@ public class ButtonHandler : MonoBehaviour
         GameObject prefab01 = Instantiate(pref01);
         prefab01.transform.parent = parent.transform;
         Rocket.Max++;
-        prefab01.AddComponent<ObjectMove>().tag = 1;
         //prefab01.GetComponent<ObjectMove>().GetTime
     }
     public void OnClickedButton02()
@@ -33,13 +32,11 @@ public class ButtonHandler : MonoBehaviour
         GameObject prefab02 = Instantiate(pref02);
         prefab02.transform.parent = parent.transform;
         Rocket.Max++;
-        prefab02.AddComponent<ObjectMove>().tag = 2;
     }
     public void OnClickedButton03()
     {
         GameObject prefab03 = Instantiate(pref03);
         prefab03.transform.parent = parent.transform;
         Rocket.Max++;
-        prefab03.AddComponent<ObjectMove>().tag = 3;
     }
 }

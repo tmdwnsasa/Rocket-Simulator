@@ -95,4 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickedOnState: 1
-  tag: 1
+  Obj_tag: 1
