@@ -5,23 +5,28 @@ using UnityEngine;
 public class ObjectMove : MonoBehaviour
 {
     static public float zMax = 0.0f;
-    public int ClickedOnState = 1;
+    public int MovingState = 1;                                     //움직일지 정하는 상태
+    public int SelectedState = 0;                                   //선택된지 정하는 상태
     public int m_Xpos;
     public int m_Ypos;
+    private Vector2 m_First_pos;
+    private Vector2 First_pos;
     private float time;
-     
-    public int Obj_tag;
 
-    public void SetTag(int tag1) { Obj_tag = tag1; }
-    public int GetTag() { return Obj_tag; }
+     
+    public Object_type Obj_tag;
+
+    public void SetTag(Object_type tag1) { Obj_tag = tag1; }
+    public Object_type GetTag() { return Obj_tag; }
     public void SetTime(float time_t) { time = time_t; }
     public float GetTime() { return time; }
     public void SetXpos(int Xpos) { m_Xpos = Xpos; }
     public int GetXpos() { return m_Xpos; }
     public void SetYpos(int Ypos) { m_Ypos = Ypos; }
     public int GetYpos() { return m_Ypos; }
+    public void SetMouseFirstVec2(Vector2 F_pos) { m_First_pos = F_pos; }
+    public Vector2 GetMouseFirstVec2() { return m_First_pos; }
 
-    // Start is called before the first frame update
     void Awake()
     {
         float temp = (float)Screen.width / (float)Screen.height;
@@ -29,25 +34,30 @@ public class ObjectMove : MonoBehaviour
         time = GameFramework.time;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         CheckClickedOn();
-        if (ClickedOnState == 1)
+        if(MovingState == 0)
         {
-            m_Xpos = (int)GameFramework.position.x / (int)constants.size;
-            m_Ypos = (int)GameFramework.position.y / (int)constants.size;
+            First_pos = new Vector2(transform.position.x, transform.position.y);
+        }
+        if (MovingState == 1)
+        {
+            m_Xpos = (int)((First_pos.x + (GameFramework.position.x - m_First_pos.x)) / constants.size);
+            m_Ypos = (int)((First_pos.y + (GameFramework.position.y - m_First_pos.y)) / constants.size);
+
+            Debug.Log((m_Xpos) + ", " + (m_Ypos));
+
             transform.position = new Vector3(m_Xpos * (int)constants.size, m_Ypos* (int)constants.size, zMax - 0.00001f);
-            Debug.Log((m_Xpos - 8) + ", " + (m_Ypos - 1));
+            transform.SetAsLastSibling();
         }
     }
 
     private void CheckClickedOn()
     {
-
         if(Input.touchCount <= 0)
         {
-            ClickedOnState = 0;
             GameFramework.selectObj = false;
             time = GameFramework.time;
             zMax -= 0.00001f;

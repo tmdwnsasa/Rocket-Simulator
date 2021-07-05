@@ -27,6 +27,7 @@ public class GameFramework : MonoBehaviour
         position = new Vector3(0.0f, 0.0f, 0.0f);
         
     }
+
     //확인용 좌표
     void OnGUI()
     {
@@ -37,6 +38,7 @@ public class GameFramework : MonoBehaviour
             "x = " + position.x.ToString("f2") +
             ", y = " + position.y.ToString("f2"));
     }
+
     void Update()
     {
         time += Time.deltaTime;
@@ -48,6 +50,7 @@ public class GameFramework : MonoBehaviour
             //Debug.Log(t_position.x + ", " + t_position.y + ", " + t_position.z + ", " + (temp));
         }
     }
+
     Vector2 GetTouchEvent()
     {
         Vector2 pos = new Vector2(0.0f, 0.0f);
