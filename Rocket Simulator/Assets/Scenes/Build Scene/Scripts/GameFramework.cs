@@ -28,17 +28,6 @@ public class GameFramework : MonoBehaviour
         
     }
 
-    //확인용 좌표
-    void OnGUI()
-    {
-        // Compute a fontSize based on the size of the screen width.
-        GUI.skin.label.fontSize = (int)(Screen.width / 25.0f);
-
-        GUI.Label(new Rect(20, 20, width, height * 0.25f),
-            "x = " + position.x.ToString("f2") +
-            ", y = " + position.y.ToString("f2"));
-    }
-
     void Update()
     {
         time += Time.deltaTime;

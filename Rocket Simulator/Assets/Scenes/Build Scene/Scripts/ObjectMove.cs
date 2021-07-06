@@ -7,8 +7,8 @@ public class ObjectMove : MonoBehaviour
     static public float zMax = 0.0f;
     public int MovingState = 1;                                     //움직일지 정하는 상태
     public int SelectedState = 0;                                   //선택된지 정하는 상태
-    public int m_Xpos;
-    public int m_Ypos;
+    private int m_Xpos;
+    private int m_Ypos;
     private Vector2 m_First_pos;
     private Vector2 First_pos;
     private float time;
@@ -38,18 +38,19 @@ public class ObjectMove : MonoBehaviour
     void Update()
     {
         CheckClickedOn();
-        if(MovingState == 0)
+        if (MovingState == 0)
         {
             First_pos = new Vector2(transform.position.x, transform.position.y);
         }
         if (MovingState == 1)
         {
+            Debug.Log(First_pos.x  + ",  "+ First_pos.y);
             m_Xpos = (int)((First_pos.x + (GameFramework.position.x - m_First_pos.x)) / constants.size);
             m_Ypos = (int)((First_pos.y + (GameFramework.position.y - m_First_pos.y)) / constants.size);
 
-            Debug.Log((m_Xpos) + ", " + (m_Ypos));
+            Debug.Log((First_pos.x + (GameFramework.position.x - m_First_pos.x)) + ",!, " + (First_pos.y + (GameFramework.position.y - m_First_pos.y)));
 
-            transform.position = new Vector3(m_Xpos * (int)constants.size, m_Ypos* (int)constants.size, zMax - 0.00001f);
+            transform.position = new Vector3(m_Xpos * constants.size, m_Ypos* constants.size, zMax - 0.00001f);
             transform.SetAsLastSibling();
         }
     }

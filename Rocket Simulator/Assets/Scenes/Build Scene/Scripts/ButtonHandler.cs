@@ -25,7 +25,6 @@ public class ButtonHandler : MonoBehaviour
         prefab01.transform.parent = parent.transform;
         Rocket.Max++;
         prefab01.GetComponent<ObjectMove>().Obj_tag = Object_type.Head01;
-        //prefab01.transform.
     }
     public void OnClickedButton02()
     {
