@@ -14,13 +14,16 @@ public class Rocket : MonoBehaviour
 
     static public List<List<int>> SendingObjects = new List<List<int>>();
 
-    static public int Max;
+    static public int ObjectMax;
 
+    static public float zMax = 0.0f;
     private Vector2 First_pos;
     private float fuel_amount;
     private float weight;
     private bool drag;
     private bool clicked = false;
+    private bool deselect = false;
+    private int SelectedObjectNum = 0;
 
     private List<Vector2> Engine = new List<Vector2>();
 
@@ -57,41 +60,69 @@ public class Rocket : MonoBehaviour
     //클릭하면
     private void CheckClickedOn()
     {
-        int temp = 0;
-        float time_temp = 0.0f;
         //터치를 하고 있으면
         if (Input.touchCount > 0)
         {
-            for (int i = 0; i < Max; i++)
+            deselect = false;
+            for (int i = 0; i < ObjectMax; i++)
             {
                 //오브젝트범위에 클릭을 누른 순간 (유지는 배제)
                 if (GameFramework.position.x - transform.GetChild(i).transform.position.x < constants.size && GameFramework.position.x - transform.GetChild(i).transform.position.x > -constants.size &&
                   GameFramework.position.y - transform.GetChild(i).transform.position.y < constants.size && GameFramework.position.y - transform.GetChild(i).transform.position.y > -constants.size)
                 {
+                    deselect = true;
+                    //클릭 시작
                     if(GameFramework.touchphase == TouchPhase.Began)
                     {
                         First_pos = new Vector2(transform.GetChild(i).transform.position.x, transform.GetChild(i).transform.position.y);
-                        transform.GetChild(temp).transform.GetComponent<ObjectMove>().SetMouseFirstVec2(new Vector2(GameFramework.position.x, GameFramework.position.y));
-                        Debug.Log(First_pos.x + ", " + First_pos.y);
+                        for (int j = 0; j < ObjectMax; j++)
+                            transform.GetChild(j).transform.GetComponent<ObjectMove>().SetMouseFirstVec2(new Vector2(GameFramework.position.x, GameFramework.position.y));
+                        //Debug.Log(First_pos.x + ", " + First_pos.y);
+
                         // 오브젝트가 눌린적이 없었으면
                         if (clicked == false)
-                            temp = i;
-
-                        clicked = true;
-                        if (transform.GetChild(temp).transform.position.z >= transform.GetChild(i).transform.position.z)
                         {
-                            temp = i;
+                            SelectedObjectNum = i;
+                        }
+                        clicked = true;
+                        if(i != SelectedObjectNum)
+                        {
+                            Debug.Log("겹쳤다!~");
+                            if (GameFramework.position.x - transform.GetChild(i).transform.position.x < constants.size && GameFramework.position.x - transform.GetChild(i).transform.position.x > -constants.size &&
+                                GameFramework.position.y - transform.GetChild(i).transform.position.y < constants.size && GameFramework.position.y - transform.GetChild(i).transform.position.y > -constants.size &&
+                                GameFramework.position.x - transform.GetChild(SelectedObjectNum).transform.position.x < constants.size && GameFramework.position.x - transform.GetChild(SelectedObjectNum).transform.position.x > -constants.size &&
+                                GameFramework.position.y - transform.GetChild(SelectedObjectNum).transform.position.y < constants.size && GameFramework.position.y - transform.GetChild(SelectedObjectNum).transform.position.y > -constants.size &&
+                                transform.GetChild(SelectedObjectNum).transform.position.z >= transform.GetChild(i).transform.position.z)
+                            {
+                                SelectedObjectNum = i;
+                            }
                         }
                     }
 
-                    if (GameFramework.touchphase == TouchPhase.Moved || GameFramework.touchphase == TouchPhase.Stationary)
+                    if ((GameFramework.touchphase == TouchPhase.Moved || GameFramework.touchphase == TouchPhase.Stationary) && i == SelectedObjectNum)
                     {
                         if (First_pos.x - GameFramework.position.x <= -constants.size * 0.75f || First_pos.x - GameFramework.position.x >= constants.size * 0.75f ||
                             First_pos.y - GameFramework.position.y <= -constants.size * 0.75f || First_pos.y - GameFramework.position.y >= constants.size * 0.75f)
                         {
-                            Debug.Log((First_pos.x - GameFramework.position.x) + ", " + (First_pos.y - GameFramework.position.y));
+                            //Debug.Log((First_pos.x - GameFramework.position.x) + ", " + (First_pos.y - GameFramework.position.y));
+                            if (i == SelectedObjectNum && clicked == true && drag == false)
+                            {
+                                if (transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().SelectedState == 1)
+                                {
+                                    for (int j = 0; j < ObjectMax; j++)
+                                    {
+                                        if (transform.GetChild(j).transform.GetComponent<ObjectMove>().SelectedState == 1)
+                                            transform.GetChild(j).transform.GetComponent<ObjectMove>().MovingState = 1;
+                                        Debug.Log(i + ", " + transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().GetXpos() + ", " + transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().GetYpos());
+                                    }
+                                }
+                                else
+                                    transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().MovingState = 1;
+                                //Debug.Log(i + ", " + SelectedObjectNum);
+                            }
                             drag = true;
                         }
+                        //오브젝트 선택
                     }
 
                     if (GameFramework.touchphase == TouchPhase.Ended)
@@ -106,38 +137,35 @@ public class Rocket : MonoBehaviour
                             {
                                 transform.GetChild(i).GetComponent<ObjectMove>().SelectedState = 0;
                             }
+                            //Debug.Log(i + "!!!!!!!!!!!, " + transform.GetChild(i).GetComponent<ObjectMove>().SelectedState);
                         }
 
-                        transform.GetChild(i).GetComponent<ObjectMove>().MovingState = 0;
+                        for (int j = 0; j < ObjectMax; j++)
+                            transform.GetChild(j).GetComponent<ObjectMove>().MovingState = 0;
                         drag = false;
                         clicked = false;
+                        SelectedObjectNum = 0;
                     }
                 }
+                
+
             }
 
             //안이 클릭되지 않았다면
-            if (clicked == false)
+            if (deselect == false && drag == false && clicked == false)
             {
-                for(int i = 0; i < Max; i++)
+                for(int i = 0; i < ObjectMax; i++)
                 {
                     transform.GetChild(i).GetComponent<ObjectMove>().SelectedState = 0;
                 }
             }
 
-            //Debug.Log(temp + ", " + clicked + ", " + drag);
-            //오브젝트 선택
-            if (temp >= 0 && clicked == true && drag == true)
-            {
-                transform.GetChild(temp).transform.GetComponent<ObjectMove>().MovingState = 1;
-                GameFramework.selectObj = true;
-            }
-            //Debug.Log(transform.GetChild(temp).transform.GetComponent<ObjectMove>().MovingState);
         }
 
         //클릭이 끝나면!
         if(GameFramework.touchphase == TouchPhase.Ended)
         {
-            for (int i = 0; i < Max; i++)
+            for (int i = 0; i < ObjectMax; i++)
             {
                 transform.GetChild(i).GetComponent<ObjectMove>().MovingState = 0;
             }
@@ -156,7 +184,7 @@ public class Rocket : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < Max; i++)
+        for (int i = 0; i < ObjectMax; i++)
         {
             if ((transform.GetChild(i).transform.GetComponent<ObjectMove>().GetXpos() - 8) >= 0 && (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetXpos() - 8) < 24 &&
                 (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1) >= 0 && (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1) < 65)
@@ -165,22 +193,26 @@ public class Rocket : MonoBehaviour
                 tempx = transform.GetChild(i).transform.GetComponent<ObjectMove>().GetXpos() - 8;
                 tempy = transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1;
                 ObjectTag[tempx][tempy] = transform.GetChild(i).transform.GetComponent<ObjectMove>().GetTag();
-                //Debug.Log(transform.GetChild(i).transform.GetComponent<ObjectMove>().Obj_tag);
-                //Debug.Log(i + "번째 원소" + tempx + ", " + tempy + "에다가 " + ObjectTag[tempx][tempy] + "저장");
             }
         }
     }
 
     private void ErrorCheck()
     {
-        for (int i = 0; i < 24; i++)
+        //Debug.Log("z : " + zMax);
+        for (int i = 0; i < ObjectMax; i++)
+        {
+            //Debug.Log(i + "   " + transform.GetChild(i).transform.position.z);
+            //Debug.Log(i + "   " + transform.GetChild(i).GetComponent<ObjectMove>().SelectedState);
+        }
+
+            for (int i = 0; i < 24; i++)
         {
             for (int j = 0; j < 65; j++)
             {
                 if (ObjectTag[i][j] != 0)
                 {
 
-                   // Debug.Log(ObjectTag[i][j] + "가" + i + ", " + j + "에 들어있다.");
                 }
             }
         }

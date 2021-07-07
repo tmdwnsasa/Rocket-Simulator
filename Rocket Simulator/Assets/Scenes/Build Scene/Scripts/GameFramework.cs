@@ -12,14 +12,12 @@ public class GameFramework : MonoBehaviour
     public static float                 time;                       //시간
     public static Vector3               position;                   //마우스 위치
     public static TouchPhase            touchphase;                 //터치의 상태
-    public static bool                  selectObj;                  //클릭한 상황
 
     private float                       width;
     private float                       height;
 
     void Awake()
     {
-        selectObj = false;
 
         width = (float)Screen.width / 2.0f;
         height = (float)Screen.height / 2.0f;

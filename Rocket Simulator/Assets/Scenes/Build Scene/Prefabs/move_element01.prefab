@@ -94,5 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97071142b94fd714f8efb10022b1f134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClickedOnState: 1
+  MovingState: 0
+  SelectedState: 0
+  spriteRenderer: {fileID: 4410776780025794262}
+  ObjectSprite: {fileID: 21300000, guid: a04c8d9f3a0efda49819f50c5d5c39d1, type: 3}
+  sel_ObjectSprite: {fileID: 21300000, guid: d6071d7f16b251146b2892f8c0c58ee5, type: 3}
   Obj_tag: 1
