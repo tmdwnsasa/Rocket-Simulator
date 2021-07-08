@@ -10,6 +10,7 @@ public enum Object_type
 }
 public class Rocket : MonoBehaviour
 {
+    public GameObject RocketObject;
     static public List<List<Object_type>> ObjectTag = new List<List<Object_type>>();
 
     static public List<List<int>> SendingObjects = new List<List<int>>();
@@ -29,6 +30,7 @@ public class Rocket : MonoBehaviour
 
     void Awake()
     {
+        DontDestroyOnLoad(RocketObject);
         for (int i = 0; i < 24; i++)
         {
             ObjectTag.Add(new List<Object_type>());
@@ -202,7 +204,7 @@ public class Rocket : MonoBehaviour
         //Debug.Log("z : " + zMax);
         for (int i = 0; i < ObjectMax; i++)
         {
-            //Debug.Log(i + "   " + transform.GetChild(i).transform.position.z);
+            Debug.Log(transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() + "   " + transform.GetChild(i).GetComponent<ObjectMove>().GetYpos());
             //Debug.Log(i + "   " + transform.GetChild(i).GetComponent<ObjectMove>().SelectedState);
         }
 

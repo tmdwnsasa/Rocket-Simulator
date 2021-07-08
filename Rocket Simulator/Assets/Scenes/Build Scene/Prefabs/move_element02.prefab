@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1370640616300918890}
   - component: {fileID: 1166347658206439035}
   - component: {fileID: 7033406859758598043}
+  - component: {fileID: 7466299830338606273}
+  - component: {fileID: 4710293625645043797}
   m_Layer: 0
   m_Name: move_element02
   m_TagString: Untagged
@@ -100,3 +102,50 @@ MonoBehaviour:
   ObjectSprite: {fileID: 21300000, guid: e1a3e8f57ae3ca44589c9da7e3532c5e, type: 3}
   sel_ObjectSprite: {fileID: 21300000, guid: c58391c13fcfc55499dfc9a6bdf0cac5, type: 3}
   Obj_tag: 2
+--- !u!61 &7466299830338606273
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221429905923038441}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.4, y: 0.4}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.4, y: 0.4}
+  m_EdgeRadius: 0
+--- !u!50 &4710293625645043797
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221429905923038441}
+  m_BodyType: 2
+  m_Simulated: 0
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 9.8
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

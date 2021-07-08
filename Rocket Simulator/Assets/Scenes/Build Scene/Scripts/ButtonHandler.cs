@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ButtonHandler : MonoBehaviour
 {
@@ -39,5 +40,13 @@ public class ButtonHandler : MonoBehaviour
         prefab03.transform.parent = parent.transform;
         Rocket.ObjectMax++;
         prefab03.GetComponent<ObjectMove>().Obj_tag = Object_type.jet_engine01;
+    }
+    public void OnClickedButtonToMain()
+    {
+        SceneManager.LoadScene("Main Scene");
+        for(int i = 0; i < Rocket.ObjectMax; i++)
+        {
+            parent.transform.GetChild(i).GetComponent<Rigidbody2D>().simulated = true;
+        }
     }
 }

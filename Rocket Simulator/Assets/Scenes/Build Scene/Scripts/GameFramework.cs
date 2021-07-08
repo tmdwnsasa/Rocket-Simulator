@@ -34,7 +34,6 @@ public class GameFramework : MonoBehaviour
         {
             float temp = (float)Screen.width / (float)Screen.height * 4.2f;
             transform.position = new Vector3(GetTouchEvent().x, GetTouchEvent().y, 0.0f);
-            //Debug.Log(t_position.x + ", " + t_position.y + ", " + t_position.z + ", " + (temp));
         }
     }
 
@@ -43,8 +42,6 @@ public class GameFramework : MonoBehaviour
         Vector2 pos = new Vector2(0.0f, 0.0f);
 
         Touch touch = Input.GetTouch(0);
-
-        //Debug.Log(width + ", " + height);
 
         pos = touch.position;
         position = new Vector3(pos.x, pos.y, 0.0f);

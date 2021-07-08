@@ -6,17 +6,21 @@ public class ObjectMove : MonoBehaviour
 {
     public int MovingState;                                     //움직일지 정하는 상태
     public int SelectedState;                                   //선택된지 정하는 상태
-    public SpriteRenderer spriteRenderer;
-    public Sprite ObjectSprite;
-    public Sprite sel_ObjectSprite;
-    private int m_Xpos;
-    private int m_Ypos;
-    private Vector2 m_First_pos;
-    private Vector2 First_pos;
-    private float time;
 
-     
-    public Object_type Obj_tag;
+    public SpriteRenderer spriteRenderer;                       //소스 변경(자신의 SpriteRenderer를 가짐)
+    public Sprite ObjectSprite;                                 //기본 스프라이트
+    public Sprite sel_ObjectSprite;                             //선택시 스프라이트
+
+    private int m_Xpos;                                         //x좌표(시작8)
+    private int m_Ypos;                                         //y좌표(시작1)
+    private Vector2 m_First_pos;                                //마우스 클릭시 마우스 첫좌표
+    private Vector2 First_pos;                                  //마우스 클릭시 오브젝트 첫좌표
+
+    private float time;                                         //시간
+
+    public Object_type Obj_tag;                                 //오브젝트 테그
+    
+
 
     public void SetTag(Object_type tag1) { Obj_tag = tag1; }
     public Object_type GetTag() { return Obj_tag; }
