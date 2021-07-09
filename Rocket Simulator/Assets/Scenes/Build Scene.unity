@@ -631,19 +631,19 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660927768}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 9.8
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &660927772
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1004,6 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ceb41c661c24847926b660f271ef5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RocketNum: 1
   parent: {fileID: 660927768}
   pref01: {fileID: 4410776780025794258, guid: e6dfd16021e24a54c977814968eaf8bd, type: 3}
   pref02: {fileID: 5221429905923038441, guid: 54420945941731047877631227a13bf9, type: 3}

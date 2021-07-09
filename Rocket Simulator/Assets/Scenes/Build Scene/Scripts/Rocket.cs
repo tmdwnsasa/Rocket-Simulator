@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Object_type
-{ 
+{
+    None = 0,
     Head01 = 1,
     fuel_tank01 = 2,
     jet_engine01 = 3
@@ -11,8 +12,8 @@ public enum Object_type
 public class Rocket : MonoBehaviour
 {
     public GameObject RocketObject;
-    static public List<List<Object_type>> ObjectTag = new List<List<Object_type>>();
 
+    static public List<List<Object_type>> ObjectTag = new List<List<Object_type>>();
     static public List<List<int>> SendingObjects = new List<List<int>>();
 
     static public int ObjectMax;
@@ -31,11 +32,12 @@ public class Rocket : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(RocketObject);
+
         for (int i = 0; i < 24; i++)
         {
             ObjectTag.Add(new List<Object_type>());
 
-            for (int j = 0; j < 65; j++)
+            for (int j = 0; j < 66; j++)
             {
                 ObjectTag[i].Add(0);
             }
@@ -45,7 +47,7 @@ public class Rocket : MonoBehaviour
         {
             SendingObjects.Add(new List<int>());
 
-            for (int j = 0; j < 65; j++)
+            for (int j = 0; j < 66; j++)
             {
                 SendingObjects[i].Add(0);
             }
@@ -74,7 +76,7 @@ public class Rocket : MonoBehaviour
                 {
                     deselect = true;
                     //클릭 시작
-                    if(GameFramework.touchphase == TouchPhase.Began)
+                    if (GameFramework.touchphase == TouchPhase.Began)
                     {
                         First_pos = new Vector2(transform.GetChild(i).transform.position.x, transform.GetChild(i).transform.position.y);
                         for (int j = 0; j < ObjectMax; j++)
@@ -87,9 +89,8 @@ public class Rocket : MonoBehaviour
                             SelectedObjectNum = i;
                         }
                         clicked = true;
-                        if(i != SelectedObjectNum)
+                        if (i != SelectedObjectNum)
                         {
-                            Debug.Log("겹쳤다!~");
                             if (GameFramework.position.x - transform.GetChild(i).transform.position.x < constants.size && GameFramework.position.x - transform.GetChild(i).transform.position.x > -constants.size &&
                                 GameFramework.position.y - transform.GetChild(i).transform.position.y < constants.size && GameFramework.position.y - transform.GetChild(i).transform.position.y > -constants.size &&
                                 GameFramework.position.x - transform.GetChild(SelectedObjectNum).transform.position.x < constants.size && GameFramework.position.x - transform.GetChild(SelectedObjectNum).transform.position.x > -constants.size &&
@@ -115,7 +116,7 @@ public class Rocket : MonoBehaviour
                                     {
                                         if (transform.GetChild(j).transform.GetComponent<ObjectMove>().SelectedState == 1)
                                             transform.GetChild(j).transform.GetComponent<ObjectMove>().MovingState = 1;
-                                        Debug.Log(i + ", " + transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().GetXpos() + ", " + transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().GetYpos());
+                                        //Debug.Log(i + ", " + transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().GetXpos() + ", " + transform.GetChild(SelectedObjectNum).transform.GetComponent<ObjectMove>().GetYpos());
                                     }
                                 }
                                 else
@@ -149,14 +150,14 @@ public class Rocket : MonoBehaviour
                         SelectedObjectNum = 0;
                     }
                 }
-                
+
 
             }
 
             //안이 클릭되지 않았다면
             if (deselect == false && drag == false && clicked == false)
             {
-                for(int i = 0; i < ObjectMax; i++)
+                for (int i = 0; i < ObjectMax; i++)
                 {
                     transform.GetChild(i).GetComponent<ObjectMove>().SelectedState = 0;
                 }
@@ -165,7 +166,7 @@ public class Rocket : MonoBehaviour
         }
 
         //클릭이 끝나면!
-        if(GameFramework.touchphase == TouchPhase.Ended)
+        if (GameFramework.touchphase == TouchPhase.Ended)
         {
             for (int i = 0; i < ObjectMax; i++)
             {
@@ -180,16 +181,16 @@ public class Rocket : MonoBehaviour
     {
         for (int i = 0; i < 24; i++)
         {
-            for (int j = 0; j < 65; j++)
+            for (int j = 0; j < 66; j++)
             {
-                ObjectTag[i][j] = 0;
+                ObjectTag[i][j] = Object_type.None;
             }
         }
 
         for (int i = 0; i < ObjectMax; i++)
         {
             if ((transform.GetChild(i).transform.GetComponent<ObjectMove>().GetXpos() - 8) >= 0 && (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetXpos() - 8) < 24 &&
-                (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1) >= 0 && (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1) < 65)
+                (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1) >= 0 && (transform.GetChild(i).transform.GetComponent<ObjectMove>().GetYpos() - 1) < 66)
             {
                 int tempx, tempy;
                 tempx = transform.GetChild(i).transform.GetComponent<ObjectMove>().GetXpos() - 8;
@@ -204,13 +205,13 @@ public class Rocket : MonoBehaviour
         //Debug.Log("z : " + zMax);
         for (int i = 0; i < ObjectMax; i++)
         {
-            Debug.Log(transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() + "   " + transform.GetChild(i).GetComponent<ObjectMove>().GetYpos());
+            //Debug.Log(transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() + "   " + transform.GetChild(i).GetComponent<ObjectMove>().GetYpos());
             //Debug.Log(i + "   " + transform.GetChild(i).GetComponent<ObjectMove>().SelectedState);
         }
 
-            for (int i = 0; i < 24; i++)
+        for (int i = 0; i < 24; i++)
         {
-            for (int j = 0; j < 65; j++)
+            for (int j = 0; j < 66; j++)
             {
                 if (ObjectTag[i][j] != 0)
                 {
@@ -220,16 +221,16 @@ public class Rocket : MonoBehaviour
         }
     }
 
-    private void MakeRocketInfo()
+    public void MakeRocketInfo()
     {
+
         for (int i = 0; i < 24; i++)
         {
-            for (int j = 0; j < 65; j++)
+            for (int j = 0; j < 66; j++)
             {
-                if (ObjectTag[i][j] == Object_type.Head01)
+                if (ObjectTag[i][j] == Object_type.fuel_tank01)
                 {
                     SendingObjects[i][j] = 1;
-
                 }
             }
         }
