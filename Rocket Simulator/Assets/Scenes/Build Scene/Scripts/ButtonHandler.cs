@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ButtonHandler : MonoBehaviour
 {
-    public int RocketNum = 1;
+    static public int RocketNum = 1;
     public GameObject parent;
 
     public GameObject pref01;
@@ -80,7 +80,7 @@ public class ButtonHandler : MonoBehaviour
             {
                 if(Rocket.SendingObjects[xpos - j][ypos] != 0)
                 {
-                    Debug.Log("왼쪽에 0아닌거 있다");
+                    //Debug.Log("왼쪽에 0아닌거 있다");
                     Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos - j][ypos];
                     changecheck = true;
                 }
@@ -89,7 +89,7 @@ public class ButtonHandler : MonoBehaviour
             {
                 if (Rocket.SendingObjects[xpos + j][ypos] != 0)
                 {
-                    Debug.Log("오른쪽에 0아닌거 있다");
+                    //Debug.Log("오른쪽에 0아닌거 있다");
                     Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos + j][ypos];
                     changecheck = true;
                 }
@@ -98,7 +98,7 @@ public class ButtonHandler : MonoBehaviour
             {
                 if (Rocket.SendingObjects[xpos][ypos - j] != 0)
                 {
-                    Debug.Log("아래에 0아닌거 있다");
+                    //Debug.Log("아래에 0아닌거 있다");
                     Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos - j];
                     changecheck = true;
                 }
@@ -107,7 +107,7 @@ public class ButtonHandler : MonoBehaviour
             {
                 if (Rocket.SendingObjects[xpos][ypos + j] != 0)
                 {
-                    Debug.Log("위에 0아닌거 있다");
+                    //Debug.Log("위에 0아닌거 있다");
                     Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos + j];
                     changecheck = true;
                 }
