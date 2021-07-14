@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class DeployedRockets : MonoBehaviour
 {
-    public GameObject m_Rocket; //새로운 로켓 저장 변수
-    private GameObject Buildrocket = null;
+    public GameObject RocketList;               //로켓 저장소
+    public GameObject m_Rocket;                 //새로운 로켓 생성 변수
+    private GameObject Buildrocket = null;      //빌드에서 가져온 로켓
     void Awake()
     {
         Buildrocket = GameObject.Find("Rocket");
@@ -15,6 +16,7 @@ public class DeployedRockets : MonoBehaviour
         for (int objcnt = 1; objcnt < ButtonHandler.RocketNum; ++objcnt)
         {
             GameObject Rocket1 = Instantiate(m_Rocket);
+            Rocket1.transform.parent = RocketList.transform;
             for (int i = 0; i < 24; i++)
             {
                 for (int j = 0; j < 66; j++)
