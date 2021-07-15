@@ -9,6 +9,8 @@ static class constants
 
 public class GameFramework : MonoBehaviour
 {
+    public GameObject GF;
+
     public static float                 time;                       //시간
     public static Vector3               position;                   //마우스 위치
     public static TouchPhase            touchphase;                 //터치의 상태
@@ -18,6 +20,7 @@ public class GameFramework : MonoBehaviour
 
     void Awake()
     {
+        DontDestroyOnLoad(GF);
 
         width = (float)Screen.width / 2.0f;
         height = (float)Screen.height / 2.0f;

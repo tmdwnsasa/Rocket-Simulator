@@ -56,6 +56,7 @@ public class Rocket : MonoBehaviour
 
     void Update()
     {
+        DestroyOutObject();
         CheckClickedOn();
         Checkobject();
         ErrorCheck();
@@ -221,18 +222,18 @@ public class Rocket : MonoBehaviour
         }
     }
 
-    public void MakeRocketInfo()
+    public void DestroyOutObject()
     {
-
-        for (int i = 0; i < 24; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            for (int j = 0; j < 66; j++)
+            if((transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() < 8 || transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() > 31 ||
+                transform.GetChild(i).GetComponent<ObjectMove>().GetYpos() < 1 || transform.GetChild(i).GetComponent<ObjectMove>().GetYpos() > 67) &&
+                Input.touchCount == 0 && GameFramework.touchphase != TouchPhase.Moved && GameFramework.touchphase != TouchPhase.Stationary)
             {
-                if (ObjectTag[i][j] == Object_type.fuel_tank01)
-                {
-                    SendingObjects[i][j] = 1;
-                }
+                Destroy(transform.GetChild(i).gameObject);
+                ObjectMax--;
             }
+
         }
     }
 }

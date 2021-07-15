@@ -368,6 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 506cfd9b2b13c3d488780fb8d94d1f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GF: {fileID: 357475133}
 --- !u!1 &538299098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,7 +1005,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ceb41c661c24847926b660f271ef5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RocketNum: 1
   parent: {fileID: 660927768}
   pref01: {fileID: 4410776780025794258, guid: e6dfd16021e24a54c977814968eaf8bd, type: 3}
   pref02: {fileID: 5221429905923038441, guid: 54420945941731047877631227a13bf9, type: 3}

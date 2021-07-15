@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class ButtonHandler : MonoBehaviour
 {
@@ -59,63 +61,139 @@ public class ButtonHandler : MonoBehaviour
 
     private void MakeRocketNum()
     {
-        for (int i = 0; i < Rocket.ObjectMax; i++)
+
+        List<List<int>> TempList = new List<List<int>>();
+        int how = 0;
+        for (int i = 0; i < 24; i++)
         {
-            bool changecheck = false;
-            int xpos = parent.transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() - 8;           //자식오브젝트의 배열안의 x값
-            int ypos = parent.transform.GetChild(i).GetComponent<ObjectMove>().GetYpos() - 1;           //자식오브젝트의 배열안의 y값
+            TempList.Add(new List<int>());
 
-            int UpperRange = 2;
-            int DownRange = 2;
-            int LeftRange = 2;
-            int RightRange = 2;
-            
-            //범위생성
-            if (xpos < 2) { LeftRange = xpos; }
-            if (xpos > 21) { RightRange = 23 - xpos; }
-            if (ypos < 2) { DownRange = ypos; }
-            if (ypos > 63) { UpperRange = 65 - ypos; }
+            for (int j = 0; j < 66; j++)
+            {
+                TempList[i].Add(0);
+            }
+        }
 
-            for (int j = 0; j <= LeftRange; j++)
+        while (true)
+        {
+            Debug.Log(++how + "번 돌았따");
+
+            TempList = DeepCopy<List<List<int>>>(Rocket.SendingObjects);
+            for (int i = 0; i < Rocket.ObjectMax; i++)
             {
-                if(Rocket.SendingObjects[xpos - j][ypos] != 0)
+                bool changecheck = false;
+                int xpos = parent.transform.GetChild(i).GetComponent<ObjectMove>().GetXpos() - 8;           //자식오브젝트의 배열안의 x값
+                int ypos = parent.transform.GetChild(i).GetComponent<ObjectMove>().GetYpos() - 1;           //자식오브젝트의 배열안의 y값
+
+                int UpperRange = 2;
+                int DownRange = 2;
+                int LeftRange = 2;
+                int RightRange = 2;
+
+                //범위생성
+                if (xpos < 2) { LeftRange = xpos; }
+                if (xpos > 21) { RightRange = 23 - xpos; }
+                if (ypos < 2) { DownRange = ypos; }
+                if (ypos > 63) { UpperRange = 65 - ypos; }
+
+                for (int j = 1; j <= LeftRange; j++)
                 {
-                    //Debug.Log("왼쪽에 0아닌거 있다");
-                    Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos - j][ypos];
-                    changecheck = true;
+                    if (Rocket.SendingObjects[xpos - j][ypos] != 0)
+                    {
+                        if (Rocket.SendingObjects[xpos][ypos] >= Rocket.SendingObjects[xpos - j][ypos])
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos - j][ypos];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos - j][ypos] && Rocket.SendingObjects[xpos][ypos] != 0)
+                        {
+                            Rocket.SendingObjects[xpos - j][ypos] = Rocket.SendingObjects[xpos][ypos];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos - j][ypos] && Rocket.SendingObjects[xpos][ypos] == 0)
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos - j][ypos];
+                        }
+                        changecheck = true;
+                    }
+                }
+                for (int j = 1; j <= RightRange; j++)
+                {
+                    if (Rocket.SendingObjects[xpos + j][ypos] != 0)
+                    {
+                        if (Rocket.SendingObjects[xpos][ypos] >= Rocket.SendingObjects[xpos + j][ypos])
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos + j][ypos];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos + j][ypos] && Rocket.SendingObjects[xpos][ypos] != 0)
+                        {
+                            Rocket.SendingObjects[xpos + j][ypos] = Rocket.SendingObjects[xpos][ypos];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos + j][ypos] && Rocket.SendingObjects[xpos][ypos] == 0)
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos + j][ypos];
+                        }
+                        changecheck = true;
+                    }
+                }
+                for (int j = 1; j <= DownRange; j++)
+                {
+                    if (Rocket.SendingObjects[xpos][ypos - j] != 0)
+                    {
+                        if (Rocket.SendingObjects[xpos][ypos] >= Rocket.SendingObjects[xpos][ypos - j])
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos - j];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos][ypos - j] && Rocket.SendingObjects[xpos][ypos] != 0)
+                        {
+                            Rocket.SendingObjects[xpos][ypos - j] = Rocket.SendingObjects[xpos][ypos];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos][ypos - j] && Rocket.SendingObjects[xpos][ypos] == 0)
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos - j];
+                        }
+                        changecheck = true;
+                    }
+                }
+                for (int j = 1; j <= UpperRange; j++)
+                {
+                    if (Rocket.SendingObjects[xpos][ypos + j] != 0)
+                    {
+                        if (Rocket.SendingObjects[xpos][ypos] >= Rocket.SendingObjects[xpos][ypos + j])
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos + j];
+                        }
+                        else if (Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos][ypos + j] && Rocket.SendingObjects[xpos][ypos] != 0)
+                        {
+                            Rocket.SendingObjects[xpos][ypos + j] = Rocket.SendingObjects[xpos][ypos];
+                        }
+                        else if(Rocket.SendingObjects[xpos][ypos] < Rocket.SendingObjects[xpos][ypos + j] && Rocket.SendingObjects[xpos][ypos] == 0)
+                        {
+                            Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos + j];
+                        }
+                        changecheck = true;
+                    }
+                }
+                if (changecheck == false)
+                {
+                    Rocket.SendingObjects[xpos][ypos] = RocketNum;
+                    ++RocketNum;
+                    Debug.Log(i + "객체의 " + (RocketNum - 1) + "개");
                 }
             }
-            for (int j = 0; j <= RightRange; j++)
+            bool same = true;
+            for (int x = 0; x < 24; x++)
             {
-                if (Rocket.SendingObjects[xpos + j][ypos] != 0)
+                for (int y = 0; y < 66; y++)
                 {
-                    //Debug.Log("오른쪽에 0아닌거 있다");
-                    Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos + j][ypos];
-                    changecheck = true;
+                    if(TempList[x][y] != Rocket.SendingObjects[x][y])
+                    {
+                        same = false;
+                    }
                 }
             }
-            for (int j = 0; j <= DownRange; j++)
+
+            if (same == true)
             {
-                if (Rocket.SendingObjects[xpos][ypos - j] != 0)
-                {
-                    //Debug.Log("아래에 0아닌거 있다");
-                    Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos - j];
-                    changecheck = true;
-                }
-            }
-            for (int j = 0; j <= UpperRange; j++)
-            {
-                if (Rocket.SendingObjects[xpos][ypos + j] != 0)
-                {
-                    //Debug.Log("위에 0아닌거 있다");
-                    Rocket.SendingObjects[xpos][ypos] = Rocket.SendingObjects[xpos][ypos + j];
-                    changecheck = true;
-                }
-            }
-            if(changecheck == false)
-            {
-                Rocket.SendingObjects[xpos][ypos] = RocketNum;
-                ++RocketNum;
+                break;
             }
         }
     }
@@ -131,6 +209,17 @@ public class ButtonHandler : MonoBehaviour
                     Debug.Log("x : " + i + ", " + "y : " + j + ", " + "값 : " + Rocket.SendingObjects[i][j]);
                 }
             }
+        }
+    }
+    public static T DeepCopy<T>(T obj)
+    {
+        using (var stream = new MemoryStream())
+        {
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
+            stream.Position = 0;
+
+            return (T)formatter.Deserialize(stream);
         }
     }
 }
