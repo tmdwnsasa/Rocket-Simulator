@@ -17,19 +17,18 @@ public class RocketMove : MonoBehaviour
     public float velocity_y;
 
 
-    // Start is called before the first frame update
     void Awake()
     {
         selectedrocketstate = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         MakeCenter();
         CalculateEngine();
         CalculateFuel();
-        //Gravity();
+        Gravity();
+        CheckCollision();
 
         Movement();
         if (rotate_state == 1)
@@ -40,7 +39,6 @@ public class RocketMove : MonoBehaviour
         {
             TurnRight();
         }
-        //transform.position = transform.forward * Time.deltaTime;
     }
 
     private void MakeCenter()
@@ -61,32 +59,31 @@ public class RocketMove : MonoBehaviour
         {
             transform.GetChild(i).transform.position = transform.GetChild(i).transform.position - ChangedAmount;
         }
-
     }
 
     private void Movement()
     {
         transform.Rotate(new Vector3(0.0f, 0.0f, rotate_velocity));
+        transform.GetComponent<Rigidbody2D>().AddForce(new Vector2(velocity_x, velocity_y));
         if (Engine_start == true && fuel_full > fuel_usage)
         {
-            transform.GetComponent<Rigidbody2D>().AddForce(new Vector2(velocity_x, velocity_y));
             fuel_usage += 0.01f;
         }
     }
 
     private void TurnLeft()
     {
-        if (rotate_velocity >= -1.0f)
+        if (rotate_velocity <= 1.0f)
         {
-            rotate_velocity -= 0.001f;
+            rotate_velocity += 0.001f;
         }
     }
 
     private void TurnRight()
     {
-        if (rotate_velocity <= 1.0f)
+        if (rotate_velocity >= -1.0f)
         {
-            rotate_velocity += 0.001f;
+            rotate_velocity -= 0.001f;
         }
     }
 
@@ -119,6 +116,17 @@ public class RocketMove : MonoBehaviour
 
     private void Gravity()
     {
-        velocity_y -= 1.0f;
+        velocity_y -= 0.98f;
+    }
+
+    private void CheckCollision()
+    {
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            if(transform.GetChild(i).GetComponent<ObjectMove>().col_checkEarth == true)
+            {
+                velocity_y = 0;
+            }
+        }
     }
 }

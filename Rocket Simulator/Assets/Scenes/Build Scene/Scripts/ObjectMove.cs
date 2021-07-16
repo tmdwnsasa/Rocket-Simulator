@@ -16,6 +16,8 @@ public class ObjectMove : MonoBehaviour
     private Vector2 m_First_pos;                                //마우스 클릭시 마우스 첫좌표
     private Vector2 First_pos;                                  //마우스 클릭시 오브젝트 첫좌표
 
+    public bool col_checkEarth;
+
     private float time;                                         //시간
 
     public Object_type Obj_tag;                                 //오브젝트 테그
@@ -43,7 +45,6 @@ public class ObjectMove : MonoBehaviour
         time = GameFramework.time;
     }
 
-
     void Update()
     {
         CheckClickedOn();
@@ -58,6 +59,7 @@ public class ObjectMove : MonoBehaviour
             time = GameFramework.time;
         }
     }
+
     private void CheckMovingOn()
     {
         if (MovingState == 0)
@@ -87,6 +89,15 @@ public class ObjectMove : MonoBehaviour
         else if (SelectedState == 0)
         {
             spriteRenderer.sprite = ObjectSprite;
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Earth")`
+        {
+            Debug.Log("asd");
+            col_checkEarth = true;
         }
     }
 }

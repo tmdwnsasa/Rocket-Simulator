@@ -44,6 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b326054c309260344b562f896084cec0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedrocketstate: 1
+  rotate_state: 0
+  Engine_start: 0
+  fuel_usage: 0
+  fuel_full: 0
+  rotate_velocity: 0
+  velocity_y: 0
 --- !u!50 &1860737765704932925
 Rigidbody2D:
   serializedVersion: 4
@@ -59,7 +66,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 9.8
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
