@@ -92,11 +92,10 @@ public class ObjectMove : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Earth")`
+        if (other.gameObject.tag == "Earth")
         {
-            Debug.Log("asd");
             col_checkEarth = true;
         }
     }

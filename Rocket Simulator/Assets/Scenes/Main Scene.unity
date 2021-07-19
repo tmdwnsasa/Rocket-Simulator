@@ -733,6 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e838cb804f3663a44b16a5936c84dbae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RocketList: {fileID: 1813289620}
 --- !u!1 &1393043432
 GameObject:
   m_ObjectHideFlags: 0

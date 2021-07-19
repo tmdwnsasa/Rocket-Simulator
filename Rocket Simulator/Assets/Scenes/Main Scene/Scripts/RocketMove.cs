@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class RocketMove : MonoBehaviour
 {
+    private Rigidbody2D rb2D;
+
     public bool selectedrocketstate = true;
     public int rotate_state;
     public bool Engine_start;
+    public bool gravity_enable;
 
     private int engine_cnt;
     public float fuel_usage = 0.0f;
     public float fuel_full;
     public float rotate_velocity;
+    public float velocity_y_gravity;
 
     private float velocity_x;
     public float velocity_y;
@@ -19,6 +23,8 @@ public class RocketMove : MonoBehaviour
 
     void Awake()
     {
+        rb2D = transform.GetComponent<Rigidbody2D>();
+        gravity_enable = true;
         selectedrocketstate = true;
     }
 
@@ -27,10 +33,13 @@ public class RocketMove : MonoBehaviour
         MakeCenter();
         CalculateEngine();
         CalculateFuel();
-        Gravity();
-        CheckCollision();
+        if(gravity_enable == true)
+        {
+            Gravity();
+        }
 
         Movement();
+
         if (rotate_state == 1)
         {
             TurnLeft();
@@ -64,7 +73,8 @@ public class RocketMove : MonoBehaviour
     private void Movement()
     {
         transform.Rotate(new Vector3(0.0f, 0.0f, rotate_velocity));
-        transform.GetComponent<Rigidbody2D>().AddForce(new Vector2(velocity_x, velocity_y));
+        transform.GetComponent<Rigidbody2D>().velocity = Vector2.up * velocity_y;
+        Debug.Log(velocity_y);
         if (Engine_start == true && fuel_full > fuel_usage)
         {
             fuel_usage += 0.01f;
@@ -98,7 +108,10 @@ public class RocketMove : MonoBehaviour
             }
         }
         if (Engine_start == true)
-            velocity_y += (float)engine_cnt * 1.0f;
+        {
+            velocity_y += (float)engine_cnt * 1.5f;
+            Debug.Log(velocity_y);
+        }
     }
 
     private void CalculateFuel()
@@ -111,7 +124,7 @@ public class RocketMove : MonoBehaviour
                 cnt++;
             }
         }
-        fuel_full = 100 * cnt;
+        fuel_full = 70 * cnt;
     }
 
     private void Gravity()
@@ -119,14 +132,27 @@ public class RocketMove : MonoBehaviour
         velocity_y -= 0.98f;
     }
 
-    private void CheckCollision()
+    void OnCollisionEnter2D(Collision2D other)
     {
-        for(int i = 0; i < transform.childCount; i++)
+        if (other.gameObject.tag == "Earth")
         {
-            if(transform.GetChild(i).GetComponent<ObjectMove>().col_checkEarth == true)
-            {
-                velocity_y = 0;
-            }
+            gravity_enable = false;
+            velocity_y = 0;
+        }
+    }
+    void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Earth")
+        {
+            gravity_enable = false;
+            velocity_y = 0;
+        }
+    }
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Earth")
+        {
+            gravity_enable = true;
         }
     }
 }
