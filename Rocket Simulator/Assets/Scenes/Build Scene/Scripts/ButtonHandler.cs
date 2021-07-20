@@ -76,7 +76,7 @@ public class ButtonHandler : MonoBehaviour
 
         while (true)
         {
-            Debug.Log(++how + "번 돌았따");
+            //Debug.Log(++how + "번 돌았따");
 
             TempList = DeepCopy<List<List<int>>>(Rocket.SendingObjects);
             for (int i = 0; i < Rocket.ObjectMax; i++)
@@ -176,7 +176,7 @@ public class ButtonHandler : MonoBehaviour
                 {
                     Rocket.SendingObjects[xpos][ypos] = RocketNum;
                     ++RocketNum;
-                    Debug.Log(i + "객체의 " + (RocketNum - 1) + "개");
+                    //Debug.Log(i + "객체의 " + (RocketNum - 1) + "개");
                 }
             }
             bool same = true;
@@ -206,7 +206,7 @@ public class ButtonHandler : MonoBehaviour
             {
                 if(Rocket.SendingObjects[i][j] != 0)
                 {
-                    Debug.Log("x : " + i + ", " + "y : " + j + ", " + "값 : " + Rocket.SendingObjects[i][j]);
+                    //Debug.Log("x : " + i + ", " + "y : " + j + ", " + "값 : " + Rocket.SendingObjects[i][j]);
                 }
             }
         }

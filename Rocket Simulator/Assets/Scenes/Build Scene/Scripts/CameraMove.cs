@@ -26,7 +26,6 @@ public class CameraMove : MonoBehaviour
         {
             if(RocketList.transform.childCount == 0)
             {
-                Debug.Log("ds");
                 transform.position = new Vector3((float)Screen.width / 2.0f, (float)Screen.height / 2.0f, -10.0f);
                 GameObject.Find("Main Camera").GetComponent<Camera>().orthographicSize = Screen.height / 2;
             }
@@ -34,7 +33,6 @@ public class CameraMove : MonoBehaviour
             {
                 if (RocketList.transform.GetChild(i).GetComponent<RocketMove>().selectedrocketstate == true)
                 {
-                    Debug.Log("ssd");
                     transform.position = new Vector3(RocketList.transform.GetChild(i).GetComponent<RocketMove>().transform.position.x, RocketList.transform.GetChild(i).GetComponent<RocketMove>().transform.position.y, -10.0f);
                 }
             }
