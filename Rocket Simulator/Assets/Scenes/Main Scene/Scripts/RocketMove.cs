@@ -77,7 +77,7 @@ public class RocketMove : MonoBehaviour
     private void Movement()
     {
         Zrotate = rotate_velocity;
-        double temp = System.Math.Truncate((double)(Zrotate * 10.0f)) / 10.0f;
+        double temp = System.Math.Round((double)(Zrotate * 100.0f)) / 100.0f;0
         //Debug.Log(temp);
         transform.Rotate(new Vector3(0.0f, 0.0f, (float)temp));
 
@@ -106,7 +106,8 @@ public class RocketMove : MonoBehaviour
         }
     }
 
-    private void CalculateEngine()
+
+    private void CalculateEngine() 
     {
         engine_cnt = 0;
 

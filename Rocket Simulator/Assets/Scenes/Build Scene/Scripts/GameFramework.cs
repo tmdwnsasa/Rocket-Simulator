@@ -13,6 +13,7 @@ public class GameFramework : MonoBehaviour
 
     public static float                 time;                       //시간
     public static Vector3               position;                   //마우스 위치
+    public static Vector3               World_position;             //world 마우스 위치
     public static TouchPhase            touchphase;                 //터치의 상태
 
     private float                       width;
@@ -45,9 +46,11 @@ public class GameFramework : MonoBehaviour
         Vector2 pos = new Vector2(0.0f, 0.0f);
 
         Touch touch = Input.GetTouch(0);
-
         pos = touch.position;
         position = new Vector3(pos.x, pos.y, 0.0f);
+        World_position = Camera.main.ScreenToWorldPoint(position);
+        Debug.Log(Camera.main.ScreenToWorldPoint(position).x);
+        Debug.Log(World_position.x + ", " + World_position.y);
         touchphase = touch.phase;
 
         //터치 후 드래그
@@ -64,13 +67,11 @@ public class GameFramework : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                // Halve the size of the cube.
                 transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
             }
 
             if (touch.phase == TouchPhase.Ended)
             {
-                // Restore the regular size of the cube.
                 transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             }
         }
