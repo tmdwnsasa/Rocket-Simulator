@@ -49,8 +49,8 @@ public class GameFramework : MonoBehaviour
         pos = touch.position;
         position = new Vector3(pos.x, pos.y, 0.0f);
         World_position = Camera.main.ScreenToWorldPoint(position);
-        Debug.Log(Camera.main.ScreenToWorldPoint(position).x);
-        Debug.Log(World_position.x + ", " + World_position.y);
+        //Debug.Log(Camera.main.ScreenToWorldPoint(position).x);
+        //Debug.Log(World_position.x + ", " + World_position.y);
         touchphase = touch.phase;
 
         //터치 후 드래그

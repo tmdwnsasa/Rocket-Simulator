@@ -52,6 +52,8 @@ public class RocketMove : MonoBehaviour
         {
             TurnRight();
         }
+
+        DrawLine();
     }
 
     private void MakeCenter()
@@ -59,16 +61,16 @@ public class RocketMove : MonoBehaviour
         Vector3 Center = new Vector3(0, 0, 0);
         Vector3 ChangedAmount = new Vector3(0, 0, 0);
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             Center = Center + transform.GetChild(i).transform.position;
         }
-        Center = Center / transform.childCount;
+        Center = Center / (transform.childCount-1);
 
         ChangedAmount = Center - transform.position;
         transform.position = Center;
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             transform.GetChild(i).transform.position = transform.GetChild(i).transform.position - ChangedAmount;
         }
@@ -77,13 +79,16 @@ public class RocketMove : MonoBehaviour
     private void Movement()
     {
         Zrotate = rotate_velocity;
-        double temp = System.Math.Round((double)(Zrotate * 100.0f)) / 100.0f;0
+        if (Zrotate == 0)
+            transform.GetComponent<Rigidbody2D>().freezeRotation = true;
+        else
+            transform.GetComponent<Rigidbody2D>().freezeRotation = false;
+        double temp = System.Math.Round((double)(Zrotate * 100.0f)) / 100.0f;
         //Debug.Log(temp);
         transform.Rotate(new Vector3(0.0f, 0.0f, (float)temp));
 
 
         transform.GetComponent<Rigidbody2D>().velocity = Vector2.up * velocity_y + Vector2.right * velocity_x;
-
         if (Engine_start == true && fuel_full > fuel_usage)
         {
             fuel_usage += 0.01f;
@@ -111,7 +116,7 @@ public class RocketMove : MonoBehaviour
     {
         engine_cnt = 0;
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).GetComponent<ObjectMove>().Obj_tag == Object_type.jet_engine01)
             {
@@ -126,14 +131,15 @@ public class RocketMove : MonoBehaviour
             //Debug.Log("Y값 : " + (float)System.Math.Cos(System.Math.PI * transform.eulerAngles.z / 180.0));
             velocity_x += (float)engine_cnt * 1.0f * -(float)System.Math.Sin(System.Math.PI * transform.eulerAngles.z / 180.0);
             velocity_y += (float)engine_cnt * 1.0f * (float)System.Math.Cos(System.Math.PI * transform.eulerAngles.z / 180.0);
-                //velocity_y += (float)engine_cnt * 1.5f;
+            Debug.Log(velocity_y);
+            //velocity_y += (float)engine_cnt * 1.5f;
         }
     }
 
     private void CalculateFuel()
     {
         int cnt = 0;
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).GetComponent<ObjectMove>().Obj_tag == Object_type.fuel_tank01)
             {
@@ -145,8 +151,37 @@ public class RocketMove : MonoBehaviour
 
     private void Gravity()
     {
-        velocity_y -= 1.00f * transform.childCount * 0.2f * grav_y;
         velocity_x -= 1.00f * transform.childCount * 0.2f * grav_x;
+        velocity_y -= 1.00f * transform.childCount * 0.2f * grav_y;
+    }
+
+    private void DrawLine()
+    {
+        Vector3[] Varrays;
+        Vector3 OrbitPos = transform.position;
+        float temp_X = velocity_x;
+        float temp_Y = velocity_y;
+        GameObject OrbitLine;
+
+        Varrays = new Vector3[2000];
+        transform.Find("Orbit").position = transform.position;
+        transform.Find("Orbit").transform.SetAsFirstSibling();
+        OrbitLine = transform.Find("Orbit").gameObject;
+        OrbitLine.GetComponent<LineRenderer>().positionCount = 2000;
+        for (int i = 0; i < 2000; i++)
+        {
+            
+            temp_X -= 1.00f * (transform.childCount-1) * 0.2f * grav_x;
+            temp_Y -= 1.00f * (transform.childCount-1) * 0.2f * grav_y;
+            OrbitPos += new Vector3(temp_X, temp_Y, 0.0f);
+
+            //Debug.Log(1.00f * (transform.childCount - 1) * 0.2f * grav_y);
+            //Debug.Log(velocity_x + ", " + velocity_y);
+            //Debug.Log(i + "번쨰 x : " + temp_X + ", y : " + temp_Y);
+            Varrays[i] = OrbitPos;
+            transform.Find("Orbit").GetComponent<LineRenderer>().SetPosition(i, Varrays[i]);
+        }
+        
     }
 
     private void AirFriction()
@@ -155,6 +190,10 @@ public class RocketMove : MonoBehaviour
             rotate_velocity -= 0.0005f;
         else if (rotate_velocity < 0.00)
             rotate_velocity += 0.0005f;
+        if (rotate_velocity < 0.0005 && rotate_velocity > 0.0)
+            rotate_velocity = 0;
+        else if (rotate_velocity > -0.0005 && rotate_velocity < 0.0)
+            rotate_velocity = 0;
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -193,7 +232,7 @@ public class RocketMove : MonoBehaviour
 
             xdir = tempx / System.Math.Abs(tempx);
             ydir = tempy / System.Math.Abs(tempy);
-            Debug.Log(xdir + ",  " + ydir);
+            //Debug.Log(xdir + ",  " + ydir);
             tempx = System.Math.Abs(tempx);
             tempy = System.Math.Abs(tempy);
 
