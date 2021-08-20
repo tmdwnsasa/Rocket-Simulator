@@ -4,28 +4,31 @@ using UnityEngine;
 
 public class RocketMove : MonoBehaviour
 {
-    private Rigidbody2D rb2D;
+    public bool selectedrocketstate = true;     //선택된 로켓인지 확인
+    public int rotate_state;                    //회전중인지 확인
+    public bool Engine_start;                   //엔진 시동 확인
+    public bool gravity_enable;                 //중력 작용 확인
+    public bool CheckAirFriction;               //공기저항 확인
 
-    public bool selectedrocketstate = true;
-    public int rotate_state;
-    public bool Engine_start;
-    public bool gravity_enable;
-    public bool CheckAirFriction;
+    private int engine_cnt;                     //작동중인 엔진 겟수 확인
+    public float speed;                        //속도 계수
+    public float fuel_usage = 0.0f;             //사용한 연료
+    public float fuel_full;                     //최대 연료
 
-    private int engine_cnt;
-    public float fuel_usage = 0.0f;
-    public float fuel_full;
+    public float rotate_velocity;               //도는 속도
+    public float Zrotate;                       //Z회전 속도
+    public float velocity_x;                    //X축 이동속도
+    public float velocity_y;                    //Y축 이동속도
+    private float grav_x, grav_y;               //중력 XY 속도
 
-    public float rotate_velocity;
-    public float Zrotate;
-    public float velocity_x;
-    public float velocity_y;
-    private float grav_x, grav_y;
+
+    private float line_x, line_y;
+
 
 
     void Awake()
     {
-        rb2D = transform.GetComponent<Rigidbody2D>();
+        speed = 0.02f;
         gravity_enable = true;
         selectedrocketstate = true;
     }
@@ -88,7 +91,8 @@ public class RocketMove : MonoBehaviour
         transform.Rotate(new Vector3(0.0f, 0.0f, (float)temp));
 
 
-        transform.GetComponent<Rigidbody2D>().velocity = Vector2.up * velocity_y + Vector2.right * velocity_x;
+        transform.position = new Vector3(transform.position.x + velocity_x, transform.position.y + velocity_y, 0.0f);
+
         if (Engine_start == true && fuel_full > fuel_usage)
         {
             fuel_usage += 0.01f;
@@ -129,9 +133,9 @@ public class RocketMove : MonoBehaviour
             //Debug.Log(transform.eulerAngles.z);
             //Debug.Log("X값 : " + -(float)System.Math.Sin(System.Math.PI * transform.eulerAngles.z / 180.0));
             //Debug.Log("Y값 : " + (float)System.Math.Cos(System.Math.PI * transform.eulerAngles.z / 180.0));
-            velocity_x += (float)engine_cnt * 1.0f * -(float)System.Math.Sin(System.Math.PI * transform.eulerAngles.z / 180.0);
-            velocity_y += (float)engine_cnt * 1.0f * (float)System.Math.Cos(System.Math.PI * transform.eulerAngles.z / 180.0);
-            Debug.Log(velocity_y);
+            velocity_x += (float)engine_cnt * speed * -(float)System.Math.Sin(System.Math.PI * transform.eulerAngles.z / 180.0);
+            velocity_y += (float)engine_cnt * speed * (float)System.Math.Cos(System.Math.PI * transform.eulerAngles.z / 180.0);
+            Debug.Log("vel" + velocity_y);
             //velocity_y += (float)engine_cnt * 1.5f;
         }
     }
@@ -149,40 +153,53 @@ public class RocketMove : MonoBehaviour
         fuel_full = 7000 * cnt;
     }
 
-    private void Gravity()
+    private void Gravity()          //무게적용
     {
-        velocity_x -= 1.00f * transform.childCount * 0.2f * grav_x;
-        velocity_y -= 1.00f * transform.childCount * 0.2f * grav_y;
+        velocity_x -= speed * transform.childCount * 0.2f * grav_x;
+        velocity_y -= speed * transform.childCount * 0.2f * grav_y;
     }
 
     private void DrawLine()
     {
         Vector3[] Varrays;
         Vector3 OrbitPos = transform.position;
-        float temp_X = velocity_x;
-        float temp_Y = velocity_y;
+
+        float vel_temp_X = velocity_x;
+        float vel_temp_Y = velocity_y;
+
         GameObject OrbitLine;
+        
+        if(Engine_start == true)
+        {
+            vel_temp_X += (float)engine_cnt * speed * -(float)System.Math.Sin(System.Math.PI * transform.eulerAngles.z / 180.0);
+            vel_temp_Y += (float)engine_cnt * speed * (float)System.Math.Cos(System.Math.PI * transform.eulerAngles.z / 180.0);
+
+            Debug.Log("tempx " + line_x + "    " + engine_cnt);
+            Debug.Log("tempy " + line_y + "    " + engine_cnt);
+        }
 
         Varrays = new Vector3[2000];
         transform.Find("Orbit").position = transform.position;
         transform.Find("Orbit").transform.SetAsFirstSibling();
         OrbitLine = transform.Find("Orbit").gameObject;
         OrbitLine.GetComponent<LineRenderer>().positionCount = 2000;
+
         for (int i = 0; i < 2000; i++)
         {
-            
-            temp_X -= 1.00f * (transform.childCount-1) * 0.2f * grav_x;
-            temp_Y -= 1.00f * (transform.childCount-1) * 0.2f * grav_y;
-            OrbitPos += new Vector3(temp_X, temp_Y, 0.0f);
+            if(gravity_enable == true)
+            {
+                vel_temp_X -= 1.00f * (transform.childCount - 1) * 0.2f * grav_x;
+                vel_temp_Y -= 1.00f * (transform.childCount - 1) * 0.2f * grav_y;
+            }
 
-            //Debug.Log(1.00f * (transform.childCount - 1) * 0.2f * grav_y);
-            //Debug.Log(velocity_x + ", " + velocity_y);
-            //Debug.Log(i + "번쨰 x : " + temp_X + ", y : " + temp_Y);
+            OrbitPos = new Vector3(vel_temp_X, vel_temp_Y, 0.0f);
+
             Varrays[i] = OrbitPos;
             transform.Find("Orbit").GetComponent<LineRenderer>().SetPosition(i, Varrays[i]);
         }
-        
     }
+
+
 
     private void AirFriction()
     {
@@ -201,6 +218,11 @@ public class RocketMove : MonoBehaviour
         if (other.gameObject.tag == "Earth")
         {
             gravity_enable = false;
+            if (Mathf.Abs(velocity_x) + Mathf.Abs(velocity_y)  > 5.0)
+            {
+                Destroy(transform.gameObject);
+                Debug.Log("DEL");
+            }
             velocity_x = 0;
             velocity_y = 0;
         }

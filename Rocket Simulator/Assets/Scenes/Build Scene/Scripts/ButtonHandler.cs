@@ -63,7 +63,6 @@ public class ButtonHandler : MonoBehaviour
     {
 
         List<List<int>> TempList = new List<List<int>>();
-        int how = 0;
         for (int i = 0; i < 24; i++)
         {
             TempList.Add(new List<int>());

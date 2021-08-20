@@ -56,4 +56,15 @@ public class MainButtonhandler : MonoBehaviour
         else if (RocketList.transform.GetChild(SeletedRocketNum).GetComponent<RocketMove>().Engine_start == true)
             RocketList.transform.GetChild(SeletedRocketNum).GetComponent<RocketMove>().Engine_start = false;
     }
+
+    public void OnClickedDownSlowButton()
+    {
+        RocketList.transform.GetChild(SeletedRocketNum).GetComponent<RocketMove>().speed /= 2.0f;
+        Debug.Log("slow");
+    }
+    public void OnClickedDownFastButton()
+    {
+        RocketList.transform.GetChild(SeletedRocketNum).GetComponent<RocketMove>().speed *= 2.0f;
+        Debug.Log("fast");
+    }
 }
